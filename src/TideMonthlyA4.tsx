@@ -143,10 +143,10 @@ export default function TideMonthlyA4({
               <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">日</th>
               <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">曜</th>
               <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">潮</th>
-              <th className="border-r border-neutral-400 bg-neutral-200 py-[1.4mm] text-center text-[9pt] font-bold">干潮 1</th>
-              <th className="border-r border-neutral-400 bg-neutral-200 py-[1.4mm] text-center text-[9pt] font-bold">干潮 2</th>
               <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">満潮 1</th>
               <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">満潮 2</th>
+              <th className="border-r border-neutral-400 bg-neutral-200 py-[1.4mm] text-center text-[9pt] font-bold">干潮 1</th>
+              <th className="border-r border-neutral-400 bg-neutral-200 py-[1.4mm] text-center text-[9pt] font-bold">干潮 2</th>
               <th className="py-[1.4mm] text-center text-[9pt] font-bold">潮位変化</th>
             </tr>
           </thead>
@@ -154,11 +154,13 @@ export default function TideMonthlyA4({
           <tbody>
             {days.map((d) => {
               const isSunday = d.weekday === "日";
+              const isSaturday = d.weekday === "土";
+              const isWeekend = isSunday || isSaturday;
 
               return (
                 <tr
                   key={d.dateKey}
-                  className={`h-[7.7mm] border-b border-neutral-400 ${
+                  className={`h-[7.7mm] border-b border-neutral-400 ${isWeekend ? "font-bold" : ""} ${
                     isSunday ? "bg-neutral-100" : d.day % 2 === 0 ? "bg-neutral-50" : "bg-white"
                   }`}
                 >
@@ -179,19 +181,19 @@ export default function TideMonthlyA4({
                   </td>
 
                   <td className="border-r border-neutral-300 px-[0.6mm] text-center font-mono">
-                    {formatEvent(d.low1)}
-                  </td>
-
-                  <td className="border-r border-neutral-300 px-[0.6mm] text-center font-mono">
-                    {formatEvent(d.low2)}
-                  </td>
-
-                  <td className="border-r border-neutral-300 px-[0.6mm] text-center font-mono">
                     {formatEvent(d.high1)}
                   </td>
 
                   <td className="border-r border-neutral-300 px-[0.6mm] text-center font-mono">
                     {formatEvent(d.high2)}
+                  </td>
+
+                  <td className="border-r border-neutral-300 bg-neutral-200/60 px-[0.6mm] text-center font-mono">
+                    {formatEvent(d.low1)}
+                  </td>
+
+                  <td className="border-r border-neutral-300 bg-neutral-200/60 px-[0.6mm] text-center font-mono">
+                    {formatEvent(d.low2)}
                   </td>
 
                   <td className="px-[1mm]">
