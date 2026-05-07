@@ -83,7 +83,7 @@ export default function TideMonthlyA4({
           print-page mx-auto box-border bg-white text-black shadow-xl
           print:mx-0 print:shadow-none
           w-[210mm] min-h-[297mm]
-          pl-[25mm] pr-[15mm] pt-[20mm] pb-[20mm]
+          pl-[22mm] pr-[12mm] pt-[12mm] pb-[12mm]
           font-sans
         "
       >
@@ -101,13 +101,13 @@ export default function TideMonthlyA4({
           </button>
         </div>
 
-        <header className="mb-[4mm] border-b border-black pb-[3mm]">
+        <header className="mb-[2.5mm] border-b border-black pb-[2mm]">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <h1 className="text-[22pt] font-bold leading-none tracking-tight">
+              <h1 className="text-[20pt] font-bold leading-none tracking-tight">
                 {year}年 {String(month).padStart(2, "0")}月 潮汐表
               </h1>
-              <div className="mt-[3mm] flex flex-wrap items-center gap-x-[4mm] gap-y-[1mm] text-[8.3pt]">
+              <div className="mt-[2mm] flex flex-wrap items-center gap-x-[3mm] gap-y-[0.8mm] text-[8pt]">
                 <span className="inline-flex items-center gap-1">
                   <MapPin size={13} />
                   観測地点：{location}
@@ -116,7 +116,7 @@ export default function TideMonthlyA4({
               </div>
             </div>
 
-            <div className="text-right text-[7.3pt] leading-relaxed text-neutral-700">
+            <div className="text-right text-[6.8pt] leading-snug text-neutral-700">
               A4縦・モノクロ印刷用
               <br />
               左25mm綴じ代対応
@@ -126,7 +126,7 @@ export default function TideMonthlyA4({
           </div>
         </header>
 
-        <table className="w-full table-fixed border-collapse text-[7.15pt] leading-tight">
+        <table className="w-full table-fixed border-collapse text-[7.7pt] leading-tight">
           <colgroup>
             <col className="w-[6mm]" />
             <col className="w-[6mm]" />
@@ -160,8 +160,8 @@ export default function TideMonthlyA4({
               return (
                 <tr
                   key={d.dateKey}
-                  className={`h-[6.8mm] border-b border-neutral-400 ${
-                    isSunday ? "bg-neutral-100" : "bg-white"
+                  className={`h-[6.9mm] border-b border-neutral-400 ${
+                    isSunday ? "bg-neutral-100" : d.day % 2 === 0 ? "bg-neutral-50" : "bg-white"
                   }`}
                 >
                   <td className="border-r border-neutral-300 text-center font-mono font-bold">
@@ -180,11 +180,11 @@ export default function TideMonthlyA4({
                     </span>
                   </td>
 
-                  <td className="border-r border-neutral-300 bg-neutral-50 px-[0.6mm] text-center font-mono">
+                  <td className="border-r border-neutral-300 px-[0.6mm] text-center font-mono">
                     {formatEvent(d.low1)}
                   </td>
 
-                  <td className="border-r border-neutral-300 bg-neutral-50 px-[0.6mm] text-center font-mono">
+                  <td className="border-r border-neutral-300 px-[0.6mm] text-center font-mono">
                     {formatEvent(d.low2)}
                   </td>
 
@@ -207,7 +207,7 @@ export default function TideMonthlyA4({
           </tbody>
         </table>
 
-        <footer className="mt-[4mm] border-t border-black pt-[3mm] text-[7pt] leading-relaxed">
+        <footer className="mt-[2.5mm] border-t border-black pt-[2mm] text-[6.8pt] leading-relaxed">
           <div className="grid grid-cols-[1fr_1.45fr] gap-[5mm]">
             <div>
               <div className="mb-[1mm] flex items-center gap-1 font-bold">
@@ -222,10 +222,6 @@ export default function TideMonthlyA4({
 
             <div>
               <p>
-                潮回り：大潮＝干満差が大きい時期、中潮＝大潮と小潮の中間、
-                小潮＝干満差が小さい時期、長潮・若潮＝小潮後の潮回り。
-              </p>
-              <p className="mt-[1mm]">
                 ※実際の潮汐データは、海上保安庁・気象庁等の公的データを確認してください。
                 本表は印刷・記録用のレイアウトであり、安全判断には最新の公式情報を使用してください。
               </p>
