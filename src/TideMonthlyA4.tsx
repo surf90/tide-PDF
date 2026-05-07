@@ -1,4 +1,4 @@
-import { Info, MapPin, Printer } from "lucide-react";
+import { MapPin, Printer } from "lucide-react";
 import type { TideDay, TideEvent } from "./types";
 
 type TideMonthlyA4Props = {
@@ -41,7 +41,7 @@ function TideWave({ day }: { day: TideDay }) {
   return (
     <svg
       viewBox="0 0 60 30"
-      className="h-[6.5mm] w-full"
+      className="h-[7.5mm] w-full"
       aria-label={`${day.day}日の潮位変化`}
       role="img"
     >
@@ -126,30 +126,28 @@ export default function TideMonthlyA4({
           </div>
         </header>
 
-        <table className="w-full table-fixed border-collapse text-[7.7pt] leading-tight">
+        <table className="w-full table-fixed border-collapse text-[10.5pt] leading-tight">
           <colgroup>
-            <col className="w-[6mm]" />
-            <col className="w-[6mm]" />
-            <col className="w-[10mm]" />
-            <col className="w-[20mm]" />
-            <col className="w-[20mm]" />
-            <col className="w-[20mm]" />
-            <col className="w-[20mm]" />
+            <col className="w-[7mm]" />
+            <col className="w-[7mm]" />
+            <col className="w-[12mm]" />
+            <col className="w-[30mm]" />
+            <col className="w-[30mm]" />
+            <col className="w-[30mm]" />
             <col className="w-[30mm]" />
             <col className="w-auto" />
           </colgroup>
 
           <thead>
             <tr className="border-y border-black bg-neutral-100">
-              <th className="border-r border-neutral-400 py-[1.35mm] text-center font-bold">日</th>
-              <th className="border-r border-neutral-400 py-[1.35mm] text-center font-bold">曜</th>
-              <th className="border-r border-neutral-400 py-[1.35mm] text-center font-bold">潮</th>
-              <th className="border-r border-neutral-400 bg-neutral-200 py-[1.35mm] text-center font-bold">干潮 1</th>
-              <th className="border-r border-neutral-400 bg-neutral-200 py-[1.35mm] text-center font-bold">干潮 2</th>
-              <th className="border-r border-neutral-400 py-[1.35mm] text-center font-bold">満潮 1</th>
-              <th className="border-r border-neutral-400 py-[1.35mm] text-center font-bold">満潮 2</th>
-              <th className="border-r border-neutral-400 py-[1.35mm] text-center font-bold">潮位変化</th>
-              <th className="py-[1.35mm] text-center font-bold">備考</th>
+              <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">日</th>
+              <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">曜</th>
+              <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">潮</th>
+              <th className="border-r border-neutral-400 bg-neutral-200 py-[1.4mm] text-center text-[9pt] font-bold">干潮 1</th>
+              <th className="border-r border-neutral-400 bg-neutral-200 py-[1.4mm] text-center text-[9pt] font-bold">干潮 2</th>
+              <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">満潮 1</th>
+              <th className="border-r border-neutral-400 py-[1.4mm] text-center text-[9pt] font-bold">満潮 2</th>
+              <th className="py-[1.4mm] text-center text-[9pt] font-bold">潮位変化</th>
             </tr>
           </thead>
 
@@ -160,7 +158,7 @@ export default function TideMonthlyA4({
               return (
                 <tr
                   key={d.dateKey}
-                  className={`h-[6.9mm] border-b border-neutral-400 ${
+                  className={`h-[7.7mm] border-b border-neutral-400 ${
                     isSunday ? "bg-neutral-100" : d.day % 2 === 0 ? "bg-neutral-50" : "bg-white"
                   }`}
                 >
@@ -172,8 +170,8 @@ export default function TideMonthlyA4({
                     {d.weekday}
                   </td>
 
-                  <td className="border-r border-neutral-300 text-center">
-                    <span className="inline-flex items-center gap-[1mm]">
+                  <td className="border-r border-neutral-300 text-center text-[9pt]">
+                    <span className="inline-flex items-center gap-[0.8mm]">
                       {d.moon === "new" && <span className="font-bold">●</span>}
                       {d.moon === "full" && <span className="font-bold">○</span>}
                       {d.tideName}
@@ -196,38 +194,14 @@ export default function TideMonthlyA4({
                     {formatEvent(d.high2)}
                   </td>
 
-                  <td className="border-r border-neutral-300 px-[1mm]">
+                  <td className="px-[1mm]">
                     <TideWave day={d} />
                   </td>
-
-                  <td className="px-[1.4mm] text-neutral-500">{d.note}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
-
-        <footer className="mt-[2.5mm] border-t border-black pt-[2mm] text-[6.8pt] leading-relaxed">
-          <div className="grid grid-cols-[1fr_1.45fr] gap-[5mm]">
-            <div>
-              <div className="mb-[1mm] flex items-center gap-1 font-bold">
-                <Info size={12} />
-                凡例
-              </div>
-              <p>
-                ● 新月　○ 満月　／　潮位の数値は cm 表記。
-                干潮・満潮欄は「時刻（潮位）」の形式で記載。
-              </p>
-            </div>
-
-            <div>
-              <p>
-                ※実際の潮汐データは、海上保安庁・気象庁等の公的データを確認してください。
-                本表は印刷・記録用のレイアウトであり、安全判断には最新の公式情報を使用してください。
-              </p>
-            </div>
-          </div>
-        </footer>
       </section>
     </main>
   );
