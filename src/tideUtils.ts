@@ -72,20 +72,19 @@ export function inferTideNameByDayIndex(day: number): TideName {
 export function inferTideNameFromMoonAge(age: number | undefined, fallbackDay: number): TideName {
   if (age == null || Number.isNaN(age)) return inferTideNameByDayIndex(fallbackDay);
 
-  const normalized = ((age % 29.53) + 29.53) % 29.53;
+  // chiga-log (assets/js/app.js: calculateTide) の判定式に合わせる。
+  // 月齢を四捨五入し 0-29 (30を法) に丸めてから、伝統的な潮回りの区分に当てはめる。
+  const normalized = ((age % 29.530588853) + 29.530588853) % 29.530588853;
+  const r = Math.round(normalized) % 30;
 
-  if (normalized <= 1.5 || normalized >= 28.0) return "大潮";
-  if (normalized <= 6.5) return "中潮";
-  if (normalized <= 9.5) return "小潮";
-  if (normalized <= 10.5) return "長潮";
-  if (normalized <= 11.5) return "若潮";
-  if (normalized <= 13.5) return "中潮";
-  if (normalized <= 16.5) return "大潮";
-  if (normalized <= 21.5) return "中潮";
-  if (normalized <= 24.5) return "小潮";
-  if (normalized <= 25.5) return "長潮";
-  if (normalized <= 26.5) return "若潮";
-  return "中潮";
+  if (r === 29 || r <= 2 || (r >= 14 && r <= 16)) return "大潮";
+  if ((r >= 3 && r <= 6) || (r >= 12 && r <= 13) || (r >= 17 && r <= 20) || (r >= 26 && r <= 28)) {
+    return "中潮";
+  }
+  if ((r >= 7 && r <= 9) || (r >= 21 && r <= 23)) return "小潮";
+  if (r === 10 || r === 24) return "長潮";
+  if (r === 11 || r === 25) return "若潮";
+  return "—";
 }
 
 export function moonMarkFromAge(age: number | undefined): "new" | "full" | undefined {
