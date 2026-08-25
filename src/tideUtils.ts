@@ -46,44 +46,25 @@ export function getDaysInMonth(year: number, month: number): number {
   return new Date(year, month, 0).getDate();
 }
 
-export function inferTideNameByDayIndex(day: number): TideName {
-  // 月齢データがない場合の表示崩れ防止用フォールバック。
-  // 実運用では tidedata.json 側に潮回りを持たせるか、mooninfo_YYYY.json から補正する。
-  const cycle: TideName[] = [
-    "大潮",
-    "大潮",
-    "中潮",
-    "中潮",
-    "中潮",
-    "小潮",
-    "小潮",
-    "長潮",
-    "若潮",
-    "中潮",
-    "中潮",
-    "中潮",
-    "大潮",
-    "大潮",
-    "大潮",
-  ];
-  return cycle[(day - 1) % cycle.length];
-}
+export function inferTideNameFromMoonAge(age: number | undefined): TideName {
+  if (age == null || !Number.isFinite(age)) return "—";
 
-export function inferTideNameFromMoonAge(age: number | undefined, fallbackDay: number): TideName {
-  if (age == null || Number.isNaN(age)) return inferTideNameByDayIndex(fallbackDay);
+  // Chiga-log と同じく、朔日を1日目とする旧暦日で潮歴を判定する。
+  // 月齢を四捨五入すると旧暦17日（例: 月齢16.553）を中潮に誤分類する。
+  // NASA由来のデータは 29.53日を超えることがあるため、0–29.999 の値は
+  // そのまま30日目として扱い、範囲外だけを朔望月で正規化する。
+  const normalized = age >= 0 && age < 30
+    ? age
+    : ((age % 29.530588853) + 29.530588853) % 29.530588853;
+  const lunarDay = Math.floor(normalized) + 1;
 
-  // chiga-log (assets/js/app.js: calculateTide) の判定式に合わせる。
-  // 月齢を四捨五入し 0-29 (30を法) に丸めてから、伝統的な潮回りの区分に当てはめる。
-  const normalized = ((age % 29.530588853) + 29.530588853) % 29.530588853;
-  const r = Math.round(normalized) % 30;
-
-  if (r === 29 || r <= 2 || (r >= 14 && r <= 16)) return "大潮";
-  if ((r >= 3 && r <= 6) || (r >= 12 && r <= 13) || (r >= 17 && r <= 20) || (r >= 26 && r <= 28)) {
+  if ([1, 2, 14, 15, 16, 17, 29, 30].includes(lunarDay)) return "大潮";
+  if ((lunarDay >= 3 && lunarDay <= 6) || (lunarDay >= 12 && lunarDay <= 13) || (lunarDay >= 18 && lunarDay <= 21) || (lunarDay >= 27 && lunarDay <= 28)) {
     return "中潮";
   }
-  if ((r >= 7 && r <= 9) || (r >= 21 && r <= 23)) return "小潮";
-  if (r === 10 || r === 24) return "長潮";
-  if (r === 11 || r === 25) return "若潮";
+  if ((lunarDay >= 7 && lunarDay <= 9) || (lunarDay >= 22 && lunarDay <= 24)) return "小潮";
+  if (lunarDay === 10 || lunarDay === 25) return "長潮";
+  if (lunarDay === 11 || lunarDay === 26) return "若潮";
   return "—";
 }
 
@@ -114,7 +95,6 @@ export function getMoonAgeForDate(
   const candidates = [
     record.age,
     record.moon_age,
-    typeof record.phase === "number" ? record.phase : undefined,
   ];
 
   return candidates.find((v): v is number => typeof v === "number" && !Number.isNaN(v));
@@ -180,7 +160,7 @@ export function buildMonthlyDays({
       dateKey,
       day,
       weekday: WEEKDAYS[date.getDay()],
-      tideName: inferTideNameFromMoonAge(moonAge, day),
+      tideName: inferTideNameFromMoonAge(moonAge),
       low1: lows[0],
       low2: lows[1],
       high1: highs[0],

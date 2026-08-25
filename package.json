@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
+    "test": "sucrase-node tests/tideUtils.test.ts",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist"
   },
