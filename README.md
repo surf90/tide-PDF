@@ -4,12 +4,14 @@
 
 ブラウザの印刷機能から、紙への印刷またはPDF保存ができます。
 
+🔗 https://surf90.github.io/tide-PDF/
+
 ## 目的
 
 - 潮汐情報を1か月単位で紙にまとめる
 - A4一枚で見やすく、バインダー保管しやすい表にする
 - 海辺での記録・確認用に、備考欄へ手書きメモできる余白を残す
-- `chiga-log` と同じように、静的JSONを読み込んでGitHub Pagesで配信できるようにする
+- `chiga-log` と同じように、静的JSONを読み込んでGitHub Pagesで配信する
 
 ## 特徴
 
@@ -86,11 +88,11 @@ npm run dev
 4. 余白は `なし` を推奨
 5. 送信先をプリンタまたはPDF保存に設定
 
-## GitHub Pagesで公開
+## GitHub Pagesでの公開
 
-このリポジトリには `.github/workflows/deploy.yml` を入れています。
-
-GitHub側で Pages の Source を `GitHub Actions` にすると、`main` ブランチへのpush時に自動公開できます。
+公開済みです（https://surf90.github.io/tide-PDF/ ）。
+Pages の Source は `GitHub Actions` に設定してあり、`.github/workflows/deploy.yml` が
+`main` ブランチへのpush時に自動でビルド・公開します。
 
 `vite.config.ts` の `base` は以下の想定です。
 
