@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import TideMonthlyA4 from "./TideMonthlyA4";
 import {
   buildMonthlyDays,
-  createFallbackAnnualData,
   getDaysInMonth,
   pad2,
 } from "./tideUtils";
@@ -12,7 +11,9 @@ import type {
   SourceRealtimeTideData,
 } from "./types";
 
-type LoadState = "loading" | "loaded" | "fallback";
+// "error": 潮汐データを 1 件も読み込めなかった。架空のサンプル値で表を埋めない
+// （印刷物が実際の潮汐と誤読されるのを防ぐ）。
+type LoadState = "loading" | "loaded" | "error";
 
 async function fetchJson<T>(path: string): Promise<T | null> {
   try {
@@ -72,8 +73,7 @@ export default function App() {
       if (annual || realtime) {
         setLoadState("loaded");
       } else {
-        setAnnualData(createFallbackAnnualData(year, month));
-        setLoadState("fallback");
+        setLoadState("error");
       }
     }
 
@@ -96,12 +96,23 @@ export default function App() {
     [year, month, annualData, realtimeData, moonInfo]
   );
 
+  const hasEvents = days.some((day) => day.allEvents.length > 0);
+
   const sourceLabel =
-    loadState === "loaded"
-      ? "data/tidedata.json 参照"
-      : loadState === "fallback"
-        ? "サンプルデータ表示中"
-        : "読み込み中";
+    loadState === "loading"
+      ? "読み込み中"
+      : loadState === "error"
+        ? "潮汐データを読み込めませんでした"
+        : hasEvents
+          ? "data/tidedata.json 参照"
+          : "この月の潮汐データがありません";
+
+  const problem =
+    loadState === "error"
+      ? "潮汐データを読み込めませんでした。表は空欄です。時間をおいて再読み込みしてください。"
+      : loadState === "loaded" && !hasEvents
+        ? `${year}年${month}月の潮汐データがありません。表は空欄です。`
+        : "";
 
   return (
     <>
@@ -142,6 +153,15 @@ export default function App() {
           </span>
         </div>
       </div>
+
+      {problem && (
+        <p
+          role="alert"
+          className="no-print mx-auto mt-2 w-[210mm] rounded border border-neutral-800 bg-white p-3 text-sm font-bold"
+        >
+          {problem}
+        </p>
+      )}
 
       <TideMonthlyA4
         year={year}
