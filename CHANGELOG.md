@@ -13,6 +13,7 @@
 ### Added
 
 - デプロイ前に `npm test` を実行
+- 型定義（`@types/react`・`@types/react-dom`・`vite/client`）と `npm run typecheck` を追加し、デプロイ前に型チェック
 - README にデータの扱い・テスト手順・関連を追記
 
 ## [0.1.0] - 2026-05-04

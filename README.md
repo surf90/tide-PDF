@@ -90,11 +90,12 @@ npm run dev
 ## テスト
 
 ```bash
-npm test     # 潮回り（潮歴）の境界テスト
+npm run typecheck   # TypeScript の型チェック
+npm test            # 潮回り（潮歴）の境界テスト
 npm run build
 ```
 
-`deploy.yml` はビルドの前に `npm test` を実行し、失敗したら公開しません。
+`deploy.yml` はビルドの前に型チェックと `npm test` を実行し、失敗したら公開しません。
 変更履歴は [CHANGELOG.md](CHANGELOG.md) を参照してください。
 
 ## 印刷・PDF保存
