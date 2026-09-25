@@ -24,6 +24,13 @@
 - `@media print` による印刷最適化
 - `lucide-react` の `Printer`, `MapPin`, `Info` を使用
 - `data/tidedata.json` と `data/tide_data.json` の読み込みに対応
+- URL の `?year=2026&month=10` で年月を指定可能
+
+## データの扱い
+
+- 表示する潮汐はリポジトリに同梱した静的 JSON（`public/data/`）だけです。閲覧中に外部 API へは接続しません。
+- 利用者が入力した情報を送信・保存することはありません。
+- **データを読み込めなかったとき、または選んだ月のデータがないときは、表を空欄にして画面上部に警告を出します。** 架空の値で表を埋めることはしません（2026-09 以前は仮のサンプル値を表示していました）。
 
 ## 参照するデータ形式
 
@@ -80,6 +87,16 @@ npm run dev
 
 ブラウザで表示されたURLを開いてください。
 
+## テスト
+
+```bash
+npm test     # 潮回り（潮歴）の境界テスト
+npm run build
+```
+
+`deploy.yml` はビルドの前に `npm test` を実行し、失敗したら公開しません。
+変更履歴は [CHANGELOG.md](CHANGELOG.md) を参照してください。
+
 ## 印刷・PDF保存
 
 1. 画面上部の「印刷 / PDF保存」をクリック
@@ -109,6 +126,10 @@ base: process.env.NODE_ENV === "production" ? "/tide-PDF/" : "/"
 
 潮汐データは、海上保安庁・気象庁等の公的データを使用・確認することを推奨します。
 
+## 関連
+
+- [ちがログ（chiga-log）](https://surf90.github.io/chiga-log/) — 潮汐データの運用元
+
 ## License
 
-MIT
+MIT License © 2026 ISHIKAWA, Natsuki（[LICENSE](LICENSE)）
